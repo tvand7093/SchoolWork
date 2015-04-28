@@ -11,6 +11,9 @@
 [Rr]elease
 [Oo]bj
 
+#OSX files
+.[Dd][Ss]_store
+
 # Precompiled Headers
 *.gch
 *.pch
