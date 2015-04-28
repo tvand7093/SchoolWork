@@ -24,6 +24,41 @@
     // Update the view, if already loaded.
 }
 
+-(void)processCells {
+    for (int r = 0; r < field.height; r++) {
+        for(int c = 0; c < field.width; c++){
+            //loop over all and update if necessary
+            NSButtonCell *bcell = [self.minefieldMatrix cellAtRow:r column:c];
+            Cell *cell = [field cellAtRow:r Col:c];
+            if(cell.exposed && !cell.marked){
+                //expose...
+                [bcell setTitle: cell.numSurroundingMines == 0
+                 ? @"" : [NSString stringWithFormat:@"%d", cell.numSurroundingMines]];
+                
+                [bcell setEnabled:false];
+                [bcell setState:1];
+            }
+        }
+    }
+}
+
+-(void)processWin {
+    for (int r = 0; r < field.height; r++) {
+        for(int c = 0; c < field.width; c++){
+            //loop over all and update if necessary
+            NSButtonCell *bcell = [self.minefieldMatrix cellAtRow:r column:c];
+            Cell *cell = [field cellAtRow:r Col:c];
+            if(cell.hasMine){
+                //disable mine
+                [bcell setTitle: [NSString stringWithFormat:@"X"]];
+                
+                [bcell setEnabled:false];
+                [bcell setState:1];
+            }
+        }
+    }
+}
+
 -(IBAction)minefieldClicked:(NSMatrix*)sender {
     const NSInteger r = [sender selectedRow];
     const NSInteger c = [sender selectedColumn];
@@ -37,16 +72,13 @@
         cell.marked = !cell.marked; // toggle marked cell
         [bcell setTitle: cell.marked ? @"P" : @""];
     }else{
+        //process it!
         int neighbors = [field exposeCellAtRow:(int)r Col:(int)c];
         bcell = [sender cellAtRow:r column:c];
         [bcell setEnabled:false];
-        NSString *neighborsAsString =[ NSString stringWithFormat:@"%d",neighbors];
         
-        if(neighbors == -2){
-            //not allowed...
-        }
-        else if (neighbors == -1){
-            //blew up
+        if (neighbors == -1){
+            //blew up, process loss.
             [self.scoreTextField setStringValue:@"BOOM"];
 
             [bcell setTitle: @"1"];
@@ -59,171 +91,33 @@
                     cell = [field cellAtRow:(int)i Col:(int)j];
                     
                     //set text appropriatly.
-                    [bcell setTitle: cell.hasMine ? @"X" : [NSString stringWithFormat:@"%d", cell.numSurroundingMines]];
+                    
+                    NSString *toPrint;
+                    if(cell.hasMine){
+                        toPrint = @"X";
+                    }
+                    else{
+                        toPrint = cell.numSurroundingMines == 0 ? @""
+                            : [NSString stringWithFormat:@"%d", cell.numSurroundingMines];
+                    }
+                    
+                    [bcell setTitle: toPrint];
                     [bcell setEnabled:false];
+                    [bcell setState:1];
                 }
             }
         }
-        else if (neighbors == 0){
-            //expose 3x3 around this cell.
-            //top
-            if(r == 0){
-                if(c == 0){
-                    //top left
-                    bcell = [sender cellAtRow:r column:c+1];
-                    cell = [field cellAtRow:(int)r Col:(int)c+1];
-
-                    [bcell setTitle:cell.numSurroundingMines == 0 ? @"" :
-                     [NSString stringWithFormat:@"%d", cell.numSurroundingMines]];
-                    
-                    [bcell setEnabled:false];
-                    [bcell setState:1];
-                    
-                    bcell = [sender cellAtRow:r+1 column:c];
-                    [bcell setEnabled:false];
-                    [bcell setState:1];
-                    
-                    bcell = [sender cellAtRow:r+1 column:c+1];
-                    [bcell setEnabled:false];
-                    [bcell setState:1];
-                }
-                else if (c == field.width){
-                    // top right
-                    bcell = [sender cellAtRow:r column:c-1];
-                    [bcell setEnabled:false];
-                    [bcell setState:1];
-
-                    bcell = [sender cellAtRow:r+1 column:c-1];
-                    [bcell setEnabled:false];
-                    [bcell setState:1];
-
-                    bcell = [sender cellAtRow:r+1 column:c];
-                    [bcell setEnabled:false];
-                    [bcell setState:1];
-                }
-                else{
-                    //top row, not corner
-                    bcell = [sender cellAtRow:r column:c-1];
-                    [bcell setEnabled:false];
-                    [bcell setState:1];
-
-                    bcell = [sender cellAtRow:r+1 column:c-1];
-                    [bcell setEnabled:false];
-                    [bcell setState:1];
-
-                    bcell = [sender cellAtRow:r+1 column:c];
-                    [bcell setEnabled:false];
-                    [bcell setState:1];
-
-                    bcell = [sender cellAtRow:r+1 column:c+1];
-                    [bcell setEnabled:false];
-                    [bcell setState:1];
-
-                    bcell = [sender cellAtRow:r column:c+1];
-                    [bcell setEnabled:false];
-                    [bcell setState:1];
-                }
-                
-            }
-            //bottom
-            else if (r == field.height){
-                if(c == 0){
-                    //bottom left
-                    bcell = [sender cellAtRow:r column:c+1];
-                    [bcell setEnabled:false];
-                    [bcell setState:1];
-
-                    bcell = [sender cellAtRow:r-1 column:c];
-                    [bcell setEnabled:false];
-                    [bcell setState:1];
-
-                    bcell = [sender cellAtRow:r-1 column:c+1];
-                    [bcell setEnabled:false];
-                    [bcell setState:1];
-                }
-                else if (c == field.width){
-                    //bottom right
-                    bcell = [sender cellAtRow:r column:c-1];
-                    [bcell setEnabled:false];
-                    [bcell setState:1];
-
-                    bcell = [sender cellAtRow:-1 column:c];
-                    [bcell setEnabled:false];
-                    [bcell setState:1];
-
-                    bcell = [sender cellAtRow:r-1 column:c-1];
-                    [bcell setEnabled:false];
-                    [bcell setState:1];
-                }
-                else{
-                    //bottom row, not corner
-                    bcell = [sender cellAtRow:r column:c+1];
-                    [bcell setEnabled:false];
-                    [bcell setState:1];
-
-                    bcell = [sender cellAtRow:r-1 column:c+1];
-                    [bcell setEnabled:false];
-                    [bcell setState:1];
-
-                    bcell = [sender cellAtRow:r-1 column:c];
-                    [bcell setEnabled:false];
-                    [bcell setState:1];
-
-                    bcell = [sender cellAtRow:r-1 column:c-1];
-                    [bcell setEnabled:false];
-                    [bcell setState:1];
-
-                    bcell = [sender cellAtRow:r column:c-1];
-                    [bcell setEnabled:false];
-                    [bcell setState:1];
-                }
+        else if (neighbors >= 0){
+            [self processCells];
+            //update score
+            if(field.unexposedCells == 0){
+                //win!
+                [self.scoreTextField setStringValue:@"WIN"];
+                [self processCells];
             }
             else{
-                //do any other case.
-                //expose all!
-                bcell = [sender cellAtRow:r column:c+1];
-                [bcell setEnabled:false];
-                [bcell setState:1];
-
-                bcell = [sender cellAtRow:r-1 column:c+1];
-                [bcell setEnabled:false];
-                [bcell setState:1];
-
-                bcell = [sender cellAtRow:r-1 column:c];
-                [bcell setEnabled:false];
-                [bcell setState:1];
-
-                bcell = [sender cellAtRow:r-1 column:c-1];
-                [bcell setEnabled:false];
-                [bcell setState:1];
-
-                bcell = [sender cellAtRow:r column:c-1];
-                [bcell setEnabled:false];
-                [bcell setState:1];
-
-                bcell = [sender cellAtRow:r+1 column:c-1];
-                [bcell setEnabled:false];
-                [bcell setState:1];
-
-                bcell = [sender cellAtRow:r+1 column:c];
-                [bcell setEnabled:false];
-                [bcell setState:1];
-
-                bcell = [sender cellAtRow:r+1 column:c+1];
-                [bcell setEnabled:false];
-                [bcell setState:1];
-
+                [self.scoreTextField setStringValue:[NSString stringWithFormat:@"%d", field.unexposedCells]];
             }
-            
-        }
-        else if(neighbors == 1){
-            //expose this cell.
-            [bcell setTitle:neighborsAsString];
-            [bcell setEnabled:false];
-        }
-        else {
-            //expose other cells up to n
-            
         }
     }
 }
@@ -234,6 +128,22 @@
     if (level == self.levelIndex)
         return; // no change
     self.levelIndex = level; // else record change
+}
+
+-(void)resetBoard:(int)h width:(int)w {
+    for(int i = 0; i < w; i++){
+        for (int j = 0; j < h; j++){
+            NSButtonCell *bcell = [self.minefieldMatrix cellAtRow:i column:j];
+            [bcell setTitle:@""];
+            [bcell setEnabled:true];
+            [bcell setState:0];
+        }
+    }
+    
+    [self.scoreTextField setStringValue:[NSString stringWithFormat:@"%d", field.unexposedCells]];
+}
+
+-(IBAction)newGame:(id)sender {
     static struct {
         int width, height, numMines;
     } levels[4] = {
@@ -242,9 +152,9 @@
         {25, 18, 90}, // 2 : advanced
         {30, 20, 150} // 3 : expert
     };
-    const int w = levels[level].width; // determine new minefield configuration
-    const int h = levels[level].height;
-    const int m = levels[level].numMines;
+    const int w = levels[self.levelIndex].width; // determine new minefield configuration
+    const int h = levels[self.levelIndex].height;
+    const int m = levels[self.levelIndex].numMines;
     //
     // Update minefield matrix and record change in size.
     // Update AutoLayout size constraints on minefield matrix.
@@ -256,8 +166,8 @@
     const CGSize deltaSize = CGSizeMake(newMatrixSize.width - matrixSize.width,
                                         newMatrixSize.height - matrixSize.height);
     
-   // self.matrixWidthConstraint.constant = newMatrixSize.width;
-   // self.matrixHeightContraint.constant = newMatrixSize.height;
+    //self.matrixWidthConstraint.constant = newMatrixSize.width;
+    //self.matrixHeightContraint.constant = newMatrixSize.height;
     //
     // Resize enclosing window according to size
     // of the minefield matrix.
@@ -274,49 +184,8 @@
     // matrix cells.
     //
     field = [[MineField alloc] initWithWidth:w Height:h Mines:m];
-  //  [self updateCells];
-  //  [self updateScore];
-}
+    [self resetBoard:w width:h];
 
--(IBAction)newGame:(id)sender {
-    
-    int w = 0;
-    int h = 0;
-    int m = 0;
-    
-    if(self.levelIndex == 0){
-        //beginer
-        field = [[MineField alloc] initWithWidth:10 Height:10 Mines:10];
-        w = h = 10;
-        m = 10;
-    }
-    else if(self.levelIndex == 1){
-        //intermediate
-        field = [[MineField alloc] initWithWidth:25 Height:25 Mines:15];
-        w = h = 25;
-        m = 15;
-    }
-    else if(self.levelIndex == 2){
-        //advanced
-        field = [[MineField alloc] initWithWidth:50 Height:50 Mines:20];
-        w = h = 50;
-        m = 20;
-    }
-    else{
-        //expert
-        field = [[MineField alloc] initWithWidth:100 Height:100 Mines:30];
-        w = h = 100;
-        m = 30;
-    }
-    
-    for(int i = 0; i < w; i++){
-        for (int j = 0; j < h; j++){
-            NSButtonCell *bcell = [self.minefieldMatrix cellAtRow:i column:j];
-            [bcell setTitle:@""];
-            [bcell setEnabled:true];
-            [bcell setState:0];
-        }
-    }
 }
 
 @end
