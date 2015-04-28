@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>0A372D31-33FA-4CB6-B07B-97B5A06C0C2B</string>
+	<key>IDESourceControlProjectName</key>
+	<string>MineSweeper</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>DFDD5528EE6895320B82A3539E9FE7845E44D296</key>
+		<string>ssh://github.com/tvand7093/SchoolWork.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>MineSweeper/MineSweeper.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>DFDD5528EE6895320B82A3539E9FE7845E44D296</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>ssh://github.com/tvand7093/SchoolWork.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>DFDD5528EE6895320B82A3539E9FE7845E44D296</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>DFDD5528EE6895320B82A3539E9FE7845E44D296</string>
+			<key>IDESourceControlWCCName</key>
+			<string>SchoolWork</string>
+		</dict>
+	</array>
+</dict>
+</plist>
