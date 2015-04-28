@@ -4,6 +4,13 @@
 *.obj
 *.elf
 
+# Xcode files
+[Dd]erivedData
+[Bb]in
+[Dd]ebug
+[Rr]elease
+[Oo]bj
+
 # Precompiled Headers
 *.gch
 *.pch
