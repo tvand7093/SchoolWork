@@ -13,6 +13,8 @@
 		809C2D8B1AEF43D000A3CA14 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 809C2D8A1AEF43D000A3CA14 /* Images.xcassets */; };
 		809C2D8E1AEF43D000A3CA14 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 809C2D8C1AEF43D000A3CA14 /* Main.storyboard */; };
 		809C2D9A1AEF43D000A3CA14 /* MineSweeperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 809C2D991AEF43D000A3CA14 /* MineSweeperTests.m */; };
+		809C2DB01AEF464700A3CA14 /* Cell.m in Sources */ = {isa = PBXBuildFile; fileRef = 809C2DAD1AEF464700A3CA14 /* Cell.m */; };
+		809C2DB11AEF464700A3CA14 /* MineField.m in Sources */ = {isa = PBXBuildFile; fileRef = 809C2DAF1AEF464700A3CA14 /* MineField.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +40,10 @@
 		809C2D931AEF43D000A3CA14 /* MineSweeperTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MineSweeperTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		809C2D981AEF43D000A3CA14 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		809C2D991AEF43D000A3CA14 /* MineSweeperTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MineSweeperTests.m; sourceTree = "<group>"; };
+		809C2DAC1AEF464700A3CA14 /* Cell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cell.h; sourceTree = "<group>"; };
+		809C2DAD1AEF464700A3CA14 /* Cell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cell.m; sourceTree = "<group>"; };
+		809C2DAE1AEF464700A3CA14 /* MineField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MineField.h; sourceTree = "<group>"; };
+		809C2DAF1AEF464700A3CA14 /* MineField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MineField.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,12 +85,12 @@
 		809C2D7F1AEF43D000A3CA14 /* MineSweeper */ = {
 			isa = PBXGroup;
 			children = (
+				809C2DA31AEF456B00A3CA14 /* Models */,
 				809C2D821AEF43D000A3CA14 /* AppDelegate.h */,
 				809C2D831AEF43D000A3CA14 /* AppDelegate.m */,
-				809C2D871AEF43D000A3CA14 /* ViewController.h */,
-				809C2D881AEF43D000A3CA14 /* ViewController.m */,
+				809C2DA41AEF458B00A3CA14 /* Controllers */,
 				809C2D8A1AEF43D000A3CA14 /* Images.xcassets */,
-				809C2D8C1AEF43D000A3CA14 /* Main.storyboard */,
+				809C2DA51AEF459F00A3CA14 /* Views */,
 				809C2D801AEF43D000A3CA14 /* Supporting Files */,
 			);
 			path = MineSweeper;
@@ -114,6 +120,34 @@
 				809C2D981AEF43D000A3CA14 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		809C2DA31AEF456B00A3CA14 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				809C2DAC1AEF464700A3CA14 /* Cell.h */,
+				809C2DAD1AEF464700A3CA14 /* Cell.m */,
+				809C2DAE1AEF464700A3CA14 /* MineField.h */,
+				809C2DAF1AEF464700A3CA14 /* MineField.m */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		809C2DA41AEF458B00A3CA14 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				809C2D871AEF43D000A3CA14 /* ViewController.h */,
+				809C2D881AEF43D000A3CA14 /* ViewController.m */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		809C2DA51AEF459F00A3CA14 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				809C2D8C1AEF43D000A3CA14 /* Main.storyboard */,
+			);
+			name = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -216,7 +250,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				809C2D891AEF43D000A3CA14 /* ViewController.m in Sources */,
+				809C2DB01AEF464700A3CA14 /* Cell.m in Sources */,
 				809C2D861AEF43D000A3CA14 /* main.m in Sources */,
+				809C2DB11AEF464700A3CA14 /* MineField.m in Sources */,
 				809C2D841AEF43D000A3CA14 /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
