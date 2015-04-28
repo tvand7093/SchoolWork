@@ -679,12 +679,18 @@
                                     <font key="font" metaFont="menu"/>
                                     <menu key="menu" id="2ib-Aw-iji">
                                         <items>
-                                            <menuItem title="Beginner" state="on" id="X4o-Ww-hme"/>
+                                            <menuItem title="Beginner" id="X4o-Ww-hme"/>
                                             <menuItem title="Intermediate" id="wKM-Dd-A26"/>
+                                            <menuItem title="Advanced" id="YV9-yW-8oM">
+                                                <modifierMask key="keyEquivalentModifierMask"/>
+                                            </menuItem>
                                             <menuItem title="Expert" id="qBl-53-5Cl"/>
                                         </items>
                                     </menu>
                                 </popUpButtonCell>
+                                <connections>
+                                    <action selector="selectLevel:" target="XfG-lQ-9wD" id="tGn-SY-Nhv"/>
+                                </connections>
                             </popUpButton>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MDi-ea-N4c">
                                 <rect key="frame" x="141" y="278" width="108" height="32"/>
@@ -692,6 +698,9 @@
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
+                                <connections>
+                                    <action selector="newGame:" target="XfG-lQ-9wD" id="Pbb-cV-Oqc"/>
+                                </connections>
                             </button>
                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0oB-Mi-PI7">
                                 <rect key="frame" x="251" y="284" width="53" height="22"/>
@@ -1131,9 +1140,16 @@
                                         </buttonCell>
                                     </column>
                                 </cells>
+                                <connections>
+                                    <action selector="minefieldClicked:" target="XfG-lQ-9wD" id="AHs-ES-78L"/>
+                                </connections>
                             </matrix>
                         </subviews>
                     </view>
+                    <connections>
+                        <outlet property="minefieldMatrix" destination="DfA-Pr-jiw" id="NIS-tD-HEP"/>
+                        <outlet property="scoreTextField" destination="0oB-Mi-PI7" id="Nev-K7-Vm0"/>
+                    </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
