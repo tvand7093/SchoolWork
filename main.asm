@@ -10,7 +10,7 @@ newline:	equ	10
 space:	 	equ	32
 zero:		equ	48
 nine:	 	equ	57
-
+multiplier	equ	10
 	
 	SECTION .bss
 maxInput:	equ	20
@@ -137,23 +137,25 @@ convert:
 	;; (*digit - '0')*digitValue
 	;; mov	al, ch
 
-	xor	eax, eax
-	mov	al, ch
-	mov	ch, [ebp-4]
-	mul	ch
+	mov	eax, 0
+	
+	add	al, ch
+
+	;; mov	eax, ecx	
+	
+	mov	ecx, [ebp-4]
+	mul	ecx
 
 	;; multiply result is in ax
-	add	[ebp-8], ax
-
-	xor	eax, eax
+	add	[ebp-8], eax
 	
 	;; digitValue *= 10
-	mov	al, 10
-	mov	ch, [ebp-4]
-	mul	ch
+	mov	eax, multiplier
+	mov	ecx, [ebp-4]
+	mul	ecx
 	
-	mov	[ebp-4], ax 	;move new digitValue into place
-	
+	mov	[ebp-4], eax 	;move new digitValue into place
+
 	sub	ebx, 1		;digit--;
 	jmp 	convert
 badNumber:
