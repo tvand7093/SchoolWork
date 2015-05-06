@@ -38,14 +38,68 @@ _start:
 	call 	readNumber
 	mov	[ebp-8], eax
 
+	;; int a = readNumber()
 	mov	ebx, [ebp-4]
+	;; int b = readNumber()
 	mov	ecx, [ebp-8]
+
+	
+	push	ecx		;m
+	push	ebx		;n
+	call	gcd		;gcd(a, b)
+
+	mov	[ebp-12], eax
 	
 	add	esp, 6
 	mov	esp, ebp
 	pop	ebp
 	jmp 	terminate
 
+gcd:
+	;; Calculates the greatest common divisor between it's two inputs
+	;; PARAMS: <int, int> value 1 (n), value 2 (n)
+	;; RETURNS: <int> the gcd
+	;; NOTE: Recursive call
+
+	;; setup stack
+	push	ebp
+	mov	ebp, esp
+	push 	ebx
+	push	ecx
+	
+	mov	ebx, [ebp+8]	;m
+	mov	ecx, [ebp+12]	;n
+	cmp	ecx, ebx
+	jg	gtCase
+	jl	ltCase
+
+	;; must be base case, so fall through
+	;; to base case
+	mov 	eax, [ebp+8]	;return n
+
+exitGcd:	
+	;; restore stack
+	pop	ecx
+	pop	ebx
+	mov	esp, ebp
+	pop 	ebp
+	ret
+	
+gtCase:
+	;; if(n > m)
+	sub	ecx, ebx	;n - m
+	push	ebx		;m
+	push	ecx		;n
+	call	gcd		;gcd(n-m, m)
+	jmp	exitGcd
+ltCase:
+	;; if(n < m)
+	sub	ebx, ecx	;m-n
+	push	ebx		;m
+	push	ecx		;n
+	call	gcd		;gcd(n, m-n)
+	jmp	exitGcd
+	
 readNumber:
 	;; Reads a string from stdin and then tries to
 	;; convert it to an integer.
@@ -135,18 +189,14 @@ convert:
 
 	
 	;; (*digit - '0')*digitValue
-	;; mov	al, ch
 
+	;; set eax to the integer value of ecx.
 	mov	eax, 0
-	
 	add	al, ch
-
-	;; mov	eax, ecx	
-	
 	mov	ecx, [ebp-4]
 	mul	ecx
 
-	;; multiply result is in ax
+	;; multiply result is in eax
 	add	[ebp-8], eax
 	
 	;; digitValue *= 10
