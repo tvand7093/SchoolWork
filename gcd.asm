@@ -18,7 +18,7 @@ multiplier	equ	10
 maxInput	equ	20
 input1		resb	maxInput+1
 input2		resb	maxInput+1
-singleChar	resb	maxInput+1
+singleChar	resb	1
 singleLen	equ	1
 	
 	SECTION .text
@@ -35,10 +35,12 @@ _start:
 	mov	dword [ebp-4], 0
 	mov	dword [ebp-8], 0
 
+	;; call read number
 	push	input1
 	call 	readNumber
 	mov 	[ebp-4], eax
 
+	;; call read number
 	push 	input2
 	call 	readNumber
 	mov	[ebp-8], eax
@@ -62,6 +64,7 @@ _start:
 	push	eax
 	call 	makeDec
 
+	;; print newline.
 	mov	byte [singleChar], newline
 	push	singleLen		;print single char
 	push	singleChar		;print newline
@@ -105,15 +108,15 @@ makeDec:
 	
 printChar:	
 	;; otherwise, add 0 to integer, and print
-	xor	edx, edx
-	mov	edx, [ebp-4]
-	add	edx, zero
+	xor	edx, edx	;zero out edx
+	mov	edx, [ebp-4]	;set edx to the char to print
+	add	edx, zero	;subtract 0 from the char to get ascii
 
-	mov  	[singleChar], dl
+	mov  	[singleChar], dl ;add the char to the buffer to print
 	
 	;; set the char to print.
 	push	singleLen		;print single char
-	push	singleChar			;the char to print
+	push	singleChar		;the char to print
 	call 	print
 
 exitDec:
@@ -215,12 +218,12 @@ getInt:
 	sub	esp, 4
 
 	nop
-	cld			;clear search direction of strings
+	cld				;clear search direction of strings
 	mov	dword [ebp-4], 1	;multiplier (digitValue)
 	mov	dword [ebp-8], 0	;return value
-	mov	ebx, [ebp+8] 	;set first char to string's first char
+	mov	ebx, [ebp+8] 		;set first char to string's first char
 
-	mov	edx, 0		;set return value
+	mov	edx, 0			;set return value
 	
 getLength:
 	;; loop for getting length of the input string.
