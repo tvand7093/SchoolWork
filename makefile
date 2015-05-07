@@ -1,20 +1,13 @@
 SYMFORMAT=dwarf
 FORMAT=elf
 
-main: main.o 
-	gcc -m32 -g -nostartfiles -o main main.o
-
-main.o: main.asm
-	nasm -f $(FORMAT) -g -F $(SYMFORMAT) main.asm
-
 clean:
-	rm *.o *~ main
-
-all: main
+	rm *.o *~ gcd
+all: gcd
 
 gcd.o: gcd.c
-	gcc -c99 -g -Wall -pedantic gcd.c -o gcd.o
+	nasm -f $(FORMAT) -g -F $(SYMFORMAT) gcd.asm
 gcd: gcd.o
-	gcc -g -Wall -pedantic gcd.o -o gcd
+	gcc -m32 -g -nostartfiles -o gcd gcd.o
 build: 
 	clear; make clean; make all;

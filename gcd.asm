@@ -1,34 +1,39 @@
 	SECTION .data
-prompt:		db	"Enter a positive integer: "
-promptLen:	equ	$-prompt
-badPrompt:	db	"Bad Number.", 10
-badLength:	equ	$-badPrompt	
-STDIN:		equ	0
-STDOUT:		equ	1
+prompt		db	"Enter a positive integer: "
+promptLen	equ	$-prompt
+badPrompt	db	"Bad Number.", 10
+badLength	equ	$-badPrompt	
+gcdPrompt	db	"Greatest common divisor: "
+gcdLen		equ	$-gcdPrompt
+STDIN		equ	0
+STDOUT		equ	1
 
-newline:	equ	10
-space:	 	equ	32
-zero:		equ	48
-nine:	 	equ	57
+newline		equ	10
+space	 	equ	32
+zero		equ	48
+nine	 	equ	57
 multiplier	equ	10
 	
 	SECTION .bss
-maxInput:	equ	20
-input1:		resb	maxInput+1
-input2:		resb	maxInput+1
+maxInput	equ	20
+input1		resb	maxInput+1
+input2		resb	maxInput+1
+singleChar	resb	maxInput+1
+singleLen	equ	1
 	
 	SECTION .text
 
 	global _start
 
 _start:
+	nop
+	
 	push 	ebp
 	mov	ebp, esp
-	sub	esp, 6
+	sub	esp, 4
 
 	mov	dword [ebp-4], 0
 	mov	dword [ebp-8], 0
-	mov	dword [ebp-12], 0
 
 	push	input1
 	call 	readNumber
@@ -43,17 +48,84 @@ _start:
 	;; int b = readNumber()
 	mov	ecx, [ebp-8]
 
-	
+	;; int answer = gcd(a,b)	
 	push	ecx		;m
 	push	ebx		;n
 	call	gcd		;gcd(a, b)
 
-	mov	[ebp-12], eax
+	;; Print the prompt message
+	push	gcdLen		;length to print
+	push    gcdPrompt	;the string to print
+	call 	print		;write(Greatest common divisor = )
 	
-	add	esp, 6
+	;; makeDecimal(answer)
+	push	eax
+	call 	makeDec
+
+	mov	byte [singleChar], newline
+	push	singleLen		;print single char
+	push	singleChar		;print newline
+	call	print		;print it.
+
+	;; restore stack
+	add	esp, 4
 	mov	esp, ebp
 	pop	ebp
 	jmp 	terminate
+
+makeDec:
+	;; Converts an integer value into a string.
+	;; PARAMS: <int> the integer to print
+	;; RETURNS: <nothing>
+	;; save stack
+	push	ebp
+	mov	ebp, esp
+	push	eax
+	push	ebx
+	push	ecx
+	push	edx
+
+	sub	esp, 2
+	
+	mov	eax, [ebp+8]	;lower = n
+	mov	edx, 0		;higher = 0
+	mov	ebx, 10		;divide by 10
+	div	ebx
+
+	;; remainder in edx, quotient in eax
+	cmp	eax, 0
+
+	mov	[ebp-4], edx
+	;; if(quotient <= 0) continue on...
+	jle	printChar
+
+	;; recursive call
+	push	eax
+	call	makeDec
+	
+printChar:	
+	;; otherwise, add 0 to integer, and print
+	xor	edx, edx
+	mov	edx, [ebp-4]
+	add	edx, zero
+
+	mov  	[singleChar], dl
+	
+	;; set the char to print.
+	push	singleLen		;print single char
+	push	singleChar			;the char to print
+	call 	print
+
+exitDec:
+	;; restore stack
+	add	esp, 2
+	pop	edx
+	pop	ecx
+	pop	ebx
+	pop	eax
+	mov	esp, ebp
+	pop	ebp
+	ret
 
 gcd:
 	;; Calculates the greatest common divisor between it's two inputs
@@ -266,7 +338,7 @@ print:
 	;; RETURNS: <nothing>
 	push	ebp
 	mov	ebp, esp
-
+	push	eax
 	push	ebx
 	push	ecx
 	push	edx
@@ -284,6 +356,7 @@ print:
 	pop	edx
 	pop	ecx
 	pop	ebx
+	pop	eax
 	mov	esp, ebp
 	pop	ebp
 	ret
