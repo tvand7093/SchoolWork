@@ -98,7 +98,7 @@ makeDec:
 	;; remainder in edx, quotient in eax
 	cmp	eax, 0
 
-	mov	[ebp-4], edx
+	mov	[ebp-4], edx	;save our current integer (non ascii value)
 	;; if(quotient <= 0) continue on...
 	jle	printChar
 
